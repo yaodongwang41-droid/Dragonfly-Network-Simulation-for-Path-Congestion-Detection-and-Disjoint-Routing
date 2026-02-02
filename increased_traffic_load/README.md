@@ -1,6 +1,6 @@
 # Path Congestion Detection and Disjoint Path for Dragonfly Networks (Experiment 1)
 
-This repository contains the simulation source code for the paper:  
+This sub-repository contains the simulation source code for the paper:  
 **"Path Congestion Detection and Disjoint Path for Improving Communication Efficiency in Dragonfly Interconnection Networks"** Published in *The Journal of Supercomputing* (2025).  
 DOI: [10.1007/s11227-025-08083-z](https://link.springer.com/article/10.1007/s11227-025-08083-z)
 
@@ -54,5 +54,6 @@ The script will simulate the network over a period (e.g., 300+ cycles) and outpu
 ## 6. Key Findings
 
 Experiment 1 highlights the superiority of PCDDJ in maintaining stable throughput. While other algorithms like normal.py and ql.py experience a sharp decline in throughput (throughput collapse) once synchronization begins, PCDDJ maintains a high and steady packet delivery rate by effectively distributing traffic across disjoint paths.
+
 
 
