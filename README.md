@@ -71,8 +71,7 @@ Each directory contains:
 
 - Shared utility modules, reused across all experiments:
 
-* `ded_dict.py`
-
+`ded_dict.py`
 Prepares and initializes the simulation environment, including:
 
 - Dragonfly topology construction
@@ -81,8 +80,7 @@ Prepares and initializes the simulation environment, including:
 
 - Packet creation and injection parameters
 
-* `disjoint_path.py`
-
+`disjoint_path.py`
 Implements the disjoint path routing logic, responsible for:
 
 - Generating feasible node-disjoint paths for given source–destination pairs
@@ -102,15 +100,15 @@ All experiments are conducted using:
 
 The default configuration matches the paper:
 
-- ## # Topology #: dragonfly(4, 8, 5)
+- * **Topology**: dragonfly(4, 8, 5)
 
-- Routers: 328
+- * **Routers**: 328 
 
-- Nodes: 1312
+- * **Nodes**: 1312 
 
-- Buffer capacity: 12 packets
+- * **Buffer capacity**: 12 packets
 
-- Traffic pattern: Uniform random
+- * **Traffic pattern**: Uniform random
 
 ## 6. Purpose of This Repository
 
@@ -138,5 +136,6 @@ The Journal of Supercomputing, 2025.
 - The simulator prioritizes clarity and experimental fidelity over runtime performance.
 
 - The code is structured to closely reflect the experimental design described in the paper.
+
 
 
