@@ -1,6 +1,6 @@
 # Path Congestion Detection and Disjoint Path for Dragonfly Networks (Experiment 2)
 
-This repository contains the simulation source code for the paper:  
+This sub-repository contains the simulation source code for the paper:  
 **"Path Congestion Detection and Disjoint Path for Improving Communication Efficiency in Dragonfly Interconnection Networks"** Published in *The Journal of Supercomputing* (2025).  
 DOI: [10.1007/s11227-025-08083-z](https://link.springer.com/article/10.1007/s11227-025-08083-z)
 
@@ -53,4 +53,5 @@ The scripts are configured to repeat simulations (e.g., num = 100) to ensure sta
 ## 6. Key Results
 
 Experiment 2 demonstrates that while standard algorithms (Basic, QL) suffer from a "throughput collapse" under high loads due to buffer saturation, the PCDDJ strategy maintains a stable and higher throughput by effectively utilizing alternative disjoint paths and preventing the injection of packets into already congested routes.
+
 
