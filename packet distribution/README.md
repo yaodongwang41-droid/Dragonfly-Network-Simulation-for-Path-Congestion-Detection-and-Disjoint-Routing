@@ -35,7 +35,7 @@ The repository includes five main simulation models:
 
 Based on the parameters in Section 7.2, the default configuration is:
 * **Topology**: Dragonfly(k, m, l)
-* **Parameters**: $k=4$, $m=8$, $n=1$, $l=5$
+* **Parameters**: $k=4$, $m=8$, $l=5$
 * **Buffer Size**: 12 packets per router.
 * **Traffic Load**: 600 injected packets (Offered Load).
 * **Metrics**: Latency distribution and throughput distribution.
@@ -59,4 +59,5 @@ As demonstrated in the paper, the PCDDJ algorithm significantly outperforms trad
 
 ## 7. Key Findings
 If you use this code or refer to the paper in your research, please cite from doi:https://doi.org/10.1007/s11227-025-08083-z
+
 
