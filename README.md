@@ -133,12 +133,13 @@ The Journal of Supercomputing, 2025.
 
 ## 8. Notes
 
--The traffic load introduced by the network controller is not modeled in this simulator.
+- The traffic load introduced by the network controller is not modeled in this simulator.
 Controller-generated traffic (binary congestion tags) is negligible compared to regular data packets, occurs infrequently, and is transmitted over dedicated router channels, ensuring no contention with normal packet traffic.
 
 - The simulator prioritizes clarity and experimental fidelity over runtime performance.
 
 - The code is structured to closely reflect the experimental design described in the paper.
+
 
 
 
