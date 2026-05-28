@@ -22,7 +22,7 @@ def routing_path(s, dct, ind, s_path, t, rid="0"):
         ind = 0
         return s, dct, ind
     elif ind == 0:  # s in source node
-        rid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s[:-1]])
+        rid = tuple(s[:-1])
         if dct[rid] < max_p:
             dct[rid] += 1
             ind = 1
@@ -32,15 +32,15 @@ def routing_path(s, dct, ind, s_path, t, rid="0"):
         for var in range(len(s_path)):
             if s_path[var] == s:
                 if var == len(s_path)-1:  # s in destination router
-                    cid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])
+                    cid = tuple(s)
                     dct[cid] -= 1
                     ind = 2
                     return t, dct, ind
                 else:
                     out_router = s_path[var + 1]
-                    rid = '0' * (len(str(L * M ** N + 1)) - len(str(s_path[var + 1][0]))) + "".join([str(x) for x in s_path[var + 1]])
+                    rid = tuple(s_path[var + 1])
         if dct[rid] < max_p:
-            cid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])
+            cid = tuple(s)
             dct[cid] -= 1
             dct[rid] += 1
             s = out_router
@@ -51,8 +51,8 @@ def packet(lam):
     times = int(lam * (L*M**N+1) * M**N*K)
     dct = ed.dct(M, N, L)
 
-    S = ed.config(lam, K, M, N, L)
-    T = ed.config(lam, K, M, N, L)
+    S = ed.config(times, K, M, N, L)
+    T = ed.config(times, K, M, N, L)
 
     dj_lib = {}
     for var in range(len(T)):  # disjoint path lib for each routing pair
@@ -82,7 +82,7 @@ def packet(lam):
                 for var in range(len(disjoint_path)):  # each path in disjoint path
                     flag = 1
                     for point in disjoint_path[var]:  # search for congestion point
-                        rid = '0' * (len(str(L * M ** N + 1)) - len(str(point[0]))) + "".join([str(x) for x in point])
+                        rid = tuple(point)
                         if dct[rid] > max_p - 2:
                             flag = 0
                             break
