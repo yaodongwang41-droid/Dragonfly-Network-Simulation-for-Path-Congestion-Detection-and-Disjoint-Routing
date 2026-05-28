@@ -23,7 +23,7 @@ def routing(s, d, dct, ind, length=0):
     elif ind == 0:  # packet in source node
         temp = s.copy()
         del temp[len(temp) - 1]
-        rid = '0' * (len(str(L * M ** N + 1)) - len(str(temp[0]))) + "".join([str(x) for x in temp])
+        rid = tuple(temp)
         if dct[rid] < max_p:
             dct[rid] += 1
             length += 1
@@ -39,8 +39,8 @@ def routing(s, d, dct, ind, length=0):
             if s[i] != index:  # to the target router of ith dimension
                 temp = s.copy()
                 temp[i] = index
-                rid = '0' * (len(str(L * M ** N + 1)) - len(str(temp[0]))) + "".join([str(x) for x in temp])
-                cid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])
+                rid = tuple(temp)
+                cid = tuple(s)
                 if dct[rid] < max_p:
                     dct[cid] -= 1
                     dct[rid] += 1
@@ -55,8 +55,8 @@ def routing(s, d, dct, ind, length=0):
                 else:
                     temp[i] = int(int((temp[0] - 1) / L) % (M ** i) / M ** (i - 1))
             temp[0] = d[0]
-            rid = '0' * (len(str(L * M ** N + 1)) - len(str(temp[0]))) + "".join([str(x) for x in temp])
-            cid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])
+            rid = tuple(temp)
+            cid = tuple(s)
             if dct[rid] < max_p:
                 dct[cid] -= 1
                 dct[rid] += 1
@@ -68,8 +68,8 @@ def routing(s, d, dct, ind, length=0):
             if s[i] != d[i]:
                 temp = s.copy()
                 temp[i] = d[i]
-                rid = '0' * (len(str(L * M ** N + 1)) - len(str(temp[0]))) + "".join([str(x) for x in temp])
-                cid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])
+                rid = tuple(temp)
+                cid = tuple(s)
                 if dct[rid] < max_p:
                     dct[cid] -= 1
                     dct[rid] += 1
@@ -77,7 +77,7 @@ def routing(s, d, dct, ind, length=0):
                     s = temp
                 return length, s, dct, ind
     else:           # in destination router
-        dct['0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])] -= 1
+        dct[tuple(s)] -= 1
         s.append(d[len(d)-1])
         ind = 2
         length += 1
@@ -101,15 +101,18 @@ def packet(lam):
     thi = [5] * times
     congested_path = []
     n_congested = 0
+    frequency = 4      # congestion disseminate frequency
 
     while rec < times * 200:
+        if cycle % frequency == 0:
+            dis_dct = dct.copy()
         for i in range(len(mark)):
             if mark[i] == 0:
                 c_path = ed.routing_path(S[i].copy(), T[i].copy(), L)
                 congestion_point = []
                 for point in c_path:  # search for congestion point
-                    rid = '0' * (len(str(L * M ** N + 1)) - len(str(point[0]))) + "".join([str(x) for x in point])
-                    if dct[rid] > max_p - 2:
+                    rid = tuple(point)
+                    if dis_dct[rid] > max_p - 2:
                         congestion_point.append(point)
                 if len(congestion_point) > 0:  # path congestion
                     mark[i] = -2  # Schedule to the next cycle
@@ -121,7 +124,7 @@ def packet(lam):
             if mark[i] == 2:
                 rec += 1
                 mark[i] = -1
-                if cycle > congestion_cycles:   # the congested path imply the destination node does not receive any packets in the last 10 cycles
+                if cycle > congestion_cycles:   # the congested path implies the destination node does not receive any packets in the last 10 cycles
                     if cycle <= thi[i%times] + congestion_cycles:
                         thi[i%times] = cycle
                     else:
