@@ -132,7 +132,7 @@ if __name__ == "__main__":
     K = 4     # number of nodes for each router
     M = 8      # number of routers in each dimension
     N = 1     # dimension of each group
-    L = 4       # number of global links for each router
+    L = 5       # number of global links for each router
     max_p = 12  # maximum buffer slots
 
     lam = np.linspace(0.05, 0.9, 18)
