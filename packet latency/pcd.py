@@ -101,11 +101,8 @@ def packet(lam):
     thi = [5] * times
     congested_path = []
     n_congested = 0
-    frequency = 4      # congestion disseminate frequency
 
     while rec < times * 200:
-        if cycle % frequency == 0:
-            dis_dct = dct.copy()
         for i in range(len(mark)):
             if mark[i] == 0:
                 c_path = ed.routing_path(S[i].copy(), T[i].copy(), L)
