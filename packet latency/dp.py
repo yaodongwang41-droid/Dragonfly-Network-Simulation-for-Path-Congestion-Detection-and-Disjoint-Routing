@@ -1,4 +1,4 @@
-import ded_dict as ed
+import dragonfly_dict as ed
 import numpy as np
 
 
@@ -14,35 +14,13 @@ def remove_duplicates(arr):
     return result
 
 
-def routing_length(s, d):
-    length = 0
-    if len(s) == len(d) and s != d:  # packet in source node
-        s = s[0:2]
-        length += 1
-    if s[0] != d[0]:   # different groups
-        if s[1] != (d[0] - int(d[0] > s[0])) // L:  # not in target router
-            s[1] = (d[0] - int(d[0] > s[0])) // L
-            length += 1
-        # in target group
-        s[1] = (s[0] - int(d[0] < s[0])) // L
-        s[0] = d[0]
-        length += 1
-    # the same group
-    if s[1] != d[1]:   # not in destination router
-        s[1] = d[1]
-        length += 1
-    if s != d:     # destination router
-        length += 1
-    return length
-
-
 def routing(s, d, dct, ind, length=0):
     if ind == -1:   # packet in destination node
         return length, s, dct, ind
     elif ind == 0:  # packet in source node
         temp = s.copy()
-        del temp[len(temp) - 1]
-        rid = '0' * (len(str(L * M ** N + 1)) - len(str(temp[0]))) + "".join([str(x) for x in temp])
+        del temp[-1]
+        rid = tuple(temp)
         if dct[rid] < max_p:
             dct[rid] += 1
             length += 1
@@ -51,15 +29,12 @@ def routing(s, d, dct, ind, length=0):
         return length, s, dct, ind
     elif s[0] != d[0]:  # different groups
         for i in range(1, len(s)):
-            if s[0] < d[0]:
-                index = int(int((d[0] - 1) / L) % (M ** i) / M ** (i - 1))  # target router ID in each dimension
-            else:
-                index = int(int(d[0] / L) % (M ** i) / M ** (i - 1))
+            index = int(int((d[0] - int(s[0] < d[0])) / L) % (M ** i) / M ** (i - 1))  # target router ID in each dimension
             if s[i] != index:  # to the target router of ith dimension
                 temp = s.copy()
                 temp[i] = index
-                rid = '0' * (len(str(L * M ** N + 1)) - len(str(temp[0]))) + "".join([str(x) for x in temp])
-                cid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])
+                rid = tuple(temp)
+                cid = tuple(s)
                 if dct[rid] < max_p:
                     dct[cid] -= 1
                     dct[rid] += 1
@@ -69,26 +44,23 @@ def routing(s, d, dct, ind, length=0):
         else:  # to the target group
             temp = s.copy()
             for i in range(1, len(s)):  # get the router ID of the target group in each dimension
-                if temp[0] < d[0]:
-                    temp[i] = int(int(temp[0] / L) % (M ** i) / M ** (i - 1))
-                else:
-                    temp[i] = int(int((temp[0] - 1) / L) % (M ** i) / M ** (i - 1))
+                temp[i] = int(int((temp[0] - int(temp[0] > d[0])) / L) % (M ** i) / M ** (i - 1))
             temp[0] = d[0]
-            rid = '0' * (len(str(L * M ** N + 1)) - len(str(temp[0]))) + "".join([str(x) for x in temp])
-            cid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])
+            rid = tuple(temp)
+            cid = tuple(s)
             if dct[rid] < max_p:
                 dct[cid] -= 1
                 dct[rid] += 1
                 length += 1
                 s = temp
             return length, s, dct, ind
-    elif s[1:len(d)-1] != d[1:len(d)-1]:  # the same group
+    elif s[1:len(d)-1] != d[1:-1]:  # the same group
         for i in range(1, len(s)):
             if s[i] != d[i]:
                 temp = s.copy()
                 temp[i] = d[i]
-                rid = '0' * (len(str(L * M ** N + 1)) - len(str(temp[0]))) + "".join([str(x) for x in temp])
-                cid = '0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])
+                rid = tuple(temp)
+                cid = tuple(s)
                 if dct[rid] < max_p:
                     dct[cid] -= 1
                     dct[rid] += 1
@@ -96,8 +68,8 @@ def routing(s, d, dct, ind, length=0):
                     s = temp
                 return length, s, dct, ind
     else:           # in destination router
-        dct['0' * (len(str(L * M ** N + 1)) - len(str(s[0]))) + "".join([str(x) for x in s])] -= 1
-        s.append(d[len(d)-1])
+        dct[tuple(s)] -= 1
+        s.append(d[-1])
         ind = 2
         length += 1
     return length, s, dct, ind
@@ -107,18 +79,14 @@ def packet(lam):
     times = int(lam * (L*M**N+1)* M**N*K)
     dct = ed.dct(M, N, L)
 
-    S = ed.config(lam, K, M, N, L)
-    T = ed.config(lam, K, M, N, L)
+    S = ed.config(times, K, M, N, L)
+    T = ed.config(times, K, M, N, L)
     cycle = 0
     length = 0
     rec = 0  # the number of received packets
     mark = list(np.zeros(times, int))
     sb, tb = S.copy(), T.copy()
-    thr = []
-    for var in range(len(S)):
-        thr.append(routing_length(S[var].copy(), T[var].copy()))
-    drop = 0
-    link_label = []
+    link_label=[]
 
     congestion_cycles = 50
     thi = [5] * times
