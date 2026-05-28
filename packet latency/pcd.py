@@ -88,8 +88,8 @@ def packet(lam):
     times = int(lam * (L*M**N+1) * M**N*K)
     dct = ed.dct(M, N, L)
 
-    S = ed.config(lam, K, M, N, L)
-    T = ed.config(lam, K, M, N, L)
+    S = ed.config(times, K, M, N, L)
+    T = ed.config(times, K, M, N, L)
     cycle = 0
     length = 0
     rec = 0  # the number of received packets
@@ -181,27 +181,27 @@ if __name__ == "__main__":
     lu /= num
     u /= num
 
-    file = open('cycles_pc1.txt', 'w')
+    file = open('cycles_pc.txt', 'w')
     for v in y:
         file.write(str(v) + '\n')
     file.close()
 
-    file = open('Throughput_pc1.txt', 'w')
+    file = open('Throughput_pc.txt', 'w')
     for v in z:
         file.write(str(v) + '\n')
     file.close()
 
-    file = open('Received_pc1.txt', 'w')
+    file = open('Received_pc.txt', 'w')
     for v in w:
         file.write(str(v) + '\n')
     file.close()
 
-    file = open('link_utilized_rate_pc1.txt', 'w')
+    file = open('link_utilized_rate_pc.txt', 'w')
     for v in lu:
         file.write(str(v) + '\n')
     file.close()
 
-    file = open('congested_path_pc1.txt', 'w')
+    file = open('congested_path_pc.txt', 'w')
     for v in u:
         file.write(str(v) + '\n')
     file.close()
